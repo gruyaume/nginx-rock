@@ -11,7 +11,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: busybox
+  IMAGE_NAME: nginx
 
 jobs:
   build:
@@ -47,7 +47,7 @@ jobs:
 
       - uses: actions/download-artifact@v3
         with:
-          name: busybox-rock
+          name: nginx-rock
 
       - name: Import and push to github package
         run: |
