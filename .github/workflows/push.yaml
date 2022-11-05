@@ -51,10 +51,10 @@ jobs:
 
       - name: Import and push to github package
         run: |
-          nginx="$(cat rockcraft.yaml | yq e '.nginx')"
+          version="$(cat rockcraft.yaml | yq e '.version')"
           sudo skopeo \
             --insecure-policy \
             copy \
-            oci-archive:"${{ env.IMAGE_NAME }}_${nginx}_amd64.rock" \
-            docker-daemon:"${{ env.REGISTRY }}/gruyaume/${{ env.IMAGE_NAME }}:${nginx}"
-          docker push ${{ env.REGISTRY }}/gruyaume/${{ env.IMAGE_NAME }}:${nginx}
+            oci-archive:"${{ env.IMAGE_NAME }}_${version}_amd64.rock" \
+            docker-daemon:"${{ env.REGISTRY }}/gruyaume/${{ env.IMAGE_NAME }}:${version}"
+          docker push ${{ env.REGISTRY }}/gruyaume/${{ env.IMAGE_NAME }}:${version}
