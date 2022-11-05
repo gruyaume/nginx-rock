@@ -1,0 +1,35 @@
+name: nginx
+version: "1.23.2"
+build-base: ubuntu:22.04
+base: ubuntu:22.04
+summary: nginx
+description: nginx
+license: Apache-2.0
+platforms:
+  amd64:
+
+cmd: ["nginx", "-g", "daemon off;"]
+
+parts:
+  nginx:
+    plugin: nil
+    source: https://nginx.org/download/nginx-1.23.2.tar.gz
+    build-packages:
+      - libgd-dev
+      - libpcre3-dev
+      - libssl-dev
+      - zlib1g-dev
+    stage-packages:
+      - libpcre3-dev
+      - libssl-dev
+      - ca-certificates
+    override-build: |
+      set -x
+      ./configure --prefix=/var/www/html --sbin-path=/usr/sbin/nginx --conf-path=/etc/nginx/nginx.conf --http-log-path=/var/log/nginx/access.log --error-log-path=/var/log/nginx/error.log --with-pcre  --lock-path=/var/lock/nginx.lock --pid-path=/var/run/nginx.pid --with-http_ssl_module --with-http_image_filter_module=dynamic --modules-path=/etc/nginx/modules --with-http_v2_module --with-stream=dynamic --with-http_addition_module --with-http_mp4_module
+      make
+      make install
+      mkdir -p $CRAFT_PART_INSTALL/etc/nginx/modules $CRAFT_PART_INSTALL/var/www/html/ $CRAFT_PART_INSTALL/usr/sbin/ $CRAFT_PART_INSTALL/var/log/nginx/ $CRAFT_PART_INSTALL/var/lock/ $CRAFT_PART_INSTALL/var/run
+      cp -r /var/www/html $CRAFT_PART_INSTALL/var/www/
+      cp -r /usr/sbin/nginx $CRAFT_PART_INSTALL/usr/sbin/
+      cp -r /etc/nginx/ $CRAFT_PART_INSTALL/etc/
+      cp -r /var/log/nginx/ $CRAFT_PART_INSTALL/var/log/
